@@ -3,7 +3,7 @@ import Form from "./components/Form";
 import styled from "@emotion/styled";
 
 const Container = styled.div`
-	max-width: 70%;
+	max-width: 50%;
 	color: white;
 	text-align: center;
 	background-color: #555555;
@@ -22,22 +22,22 @@ const ContainerProfile = styled.div`
 `;
 const ContainerInfo = styled.div`
 	color: white;
-	width: 30%;
+	width: 40%;
 `;
 
 const ContainerRepos = styled.div`
-	width: 50%;
+	width: 90%;
 `;
 
 const Repo = styled.div`
 	display: flex;
 	justify-content: space-between;
-  padding: 0 2rem;
-  border-bottom: 1px solid #ffffff;
+	padding: 0 2rem;
+	border-bottom: 1px solid #ffffff;
 `;
 const Icons = styled.div`
-display: flex;
-align-items:center;
+	display: flex;
+	align-items: center;
 `;
 
 function App() {
@@ -49,11 +49,11 @@ function App() {
 		<Container>
 			<Form
 				setDataApi={setDataApi}
-				dataApiRepos={dataApiRepos}
 				setDataApiRepos={setDataApiRepos}
 			/>
 
 			{Object.keys(dataApi).length !== 0 ? (
+				//Si dataAPI no esta vacio, muestra el perfil
 				<>
 					<ContainerProfile>
 						<img src={avatar} alt="Avatar Github" width="150" />
@@ -65,21 +65,27 @@ function App() {
 					</ContainerProfile>
 
 					<ContainerRepos>
-            {dataApiRepos !== null
-              ?
-              dataApiRepos.map((repo) => 
-                <containerRepos>
-                  <Repo>
-                    <h4>{repo.name}</h4>
-                    <Icons>{repo.stargazers_count} - {repo.forks}</Icons>
-                  </Repo>
-                </containerRepos>
-              )
-					  	: null
-            }
+						{dataApiRepos !== null
+							? //Si dataApiRepos tiene información, recorre los repositorios y los muestra.
+							  dataApiRepos.map((repo, index) => (
+										<Repo key={index}>
+											<h4>{repo.name}</h4>
+											<Icons>
+												<span>
+													<i className="fas fa-star"> </i> {repo.stargazers_count}
+												</span>
+												<span>
+													<i className="fas fa-code-branch"> </i> {repo.forks}
+												</span>
+											</Icons>
+										</Repo>
+							  ))
+							: //Sino no hace nada...
+							  null}
 					</ContainerRepos>
 				</>
-			) : null}
+			) : //Sino no hace nada...
+			null}
 		</Container>
 	);
 }

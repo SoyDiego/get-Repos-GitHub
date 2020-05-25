@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Error from "./Error";
+import Loading from './Loading'
 import styled from "@emotion/styled";
 
 const FormContainer = styled.form`
@@ -28,10 +29,12 @@ const Button = styled.button`
 	padding: 0.5rem 1.5rem;
 `;
 
-const Form = ({ setDataApi, setDataApiRepos, dataApiRepos }) => {
+const Form = ({ setDataApi, setDataApiRepos}) => {
 	const [info, setInfo] = useState({
 		user: "",
-	});
+    });
+    
+    const [showloading, setShowLoading] = useState(false)
 
 	const [error, setError] = useState({
 		active: false,
@@ -66,10 +69,12 @@ const Form = ({ setDataApi, setDataApiRepos, dataApiRepos }) => {
 
 		//Llamamos a la API
 		(async () => {
+            setShowLoading(true)
 			const json = await fetch("https://api.github.com/users/" + user);
 			const data = await json.json();
 
 			if (data.message === "Not Found") {
+                setShowLoading(false)
 				setError({
 					active: true,
 					message: user + " does not exist.",
@@ -95,9 +100,13 @@ const Form = ({ setDataApi, setDataApiRepos, dataApiRepos }) => {
 				);
                 const data = await json.json();
                 
-				setDataApiRepos(data)
+                setShowLoading(false)
+                setDataApiRepos(data)
 			})();
-		})();
+        })();
+        
+        //Limpiamos form
+        setInfo({})
 	};
 	return (
 		<>
@@ -113,6 +122,13 @@ const Form = ({ setDataApi, setDataApiRepos, dataApiRepos }) => {
 			</FormContainer>
 
 			{active ? <Error message={message}></Error> : null}
+
+            {
+                showloading
+                    ? <Loading/>
+                    : null
+            }
+            
 		</>
 	);
 };
