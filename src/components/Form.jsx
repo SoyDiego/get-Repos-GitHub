@@ -29,7 +29,7 @@ const Button = styled.button`
 	padding: 0.5rem 1.5rem;
 `;
 
-const Form = ({ setDataApi, setDataApiRepos}) => {
+const Form = ({e,setDataApi, setDataApiRepos}) => {
 	const [info, setInfo] = useState({
 		user: "",
     });
@@ -106,7 +106,7 @@ const Form = ({ setDataApi, setDataApiRepos}) => {
         })();
         
         //Limpiamos form
-        setInfo({})
+        e.target.reset();
 	};
 	return (
 		<>
